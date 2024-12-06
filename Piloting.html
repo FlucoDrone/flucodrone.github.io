@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piloting Scoring</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .score {
+            font-size: 48px;
+            margin: 20px 0;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .adjustment-row {
+            margin-bottom: 15px;
+        }
+        .adjustment-row .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .adjustment-row .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .adjustment-row .controls button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+        .adjustment-row .controls .decrease {
+            background-color: red;
+        }
+        .adjustment-row .controls .increase {
+            background-color: green;
+        }
+        .adjustment-row .controls span {
+            font-size: 24px;
+            width: 40px;
+            text-align: center;
+            display: inline-block;
+            margin: 0 10px;
+        }
+        .reset {
+            background-color: gray;
+            padding: 15px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+        }
+        .reset:hover {
+            opacity: 0.8;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <button class="reset" onclick="resetScore()">Reset</button>
+        <div class="score" id="score">0</div>
+        <div class="section" id="adjustments"></div>
+    </div>
+
+    <script>
+        let score = 0;
+
+        // Action details: name and point values
+        const actions = [
+            { name: "Takeoff", points: 10, max: 1 },
+            { name: "Figure 8", points: 40 },
+            { name: "Small Hole", points: 40 },
+            { name: "Large Hole", points: 20 },
+            { name: "Keyhole", points: 15 },
+            { name: "Landing Pad", points: 15, max: 1 },
+            { name: "Small Cube", points: 40, max: 1 },
+            { name: "Large Cube", points: 25, max: 1 }
+        ];
+
+        const counts = {};
+
+        // Keeping track of the special rule for Landing Pad, Small Cube, and Large Cube
+        let selectedSpecial = null;
+
+        function createAdjustmentRows() {
+            const adjustmentContainer = document.getElementById('adjustments');
+            actions.forEach((action, index) => {
+                const row = document.createElement('div');
+                row.className = 'adjustment-row';
+                row.innerHTML = `
+                    <div class="title">${action.name}</div>
+                    <div class="controls">
+                        <button class="decrease" onclick="adjust('${action.name}', -1)">-</button>
+                        <span id="${action.name.replace(/ /g, '-')}-count">0</span>
+                        <button class="increase" onclick="adjust('${action.name}', 1)">+</button>
+                    </div>
+                    ${index < actions.length - 1 ? '<hr>' : ''}
+                `;
+                adjustmentContainer.appendChild(row);
+                counts[action.name] = 0;
+            });
+        }
+
+        function adjust(action, amount) {
+            const actionPoints = actions.find(a => a.name === action).points;
+            const max = actions.find(a => a.name === action).max;
+
+            // For actions that have a maximum (Landing Pad, Small Cube, Large Cube)
+            if (max) {
+                if (counts[action] + amount > max) {
+                    return; // Don't allow more than the max for these actions
+                }
+            }
+
+            // Special rule for Landing Pad, Small Cube, and Large Cube
+            if (action === "Landing Pad" || action === "Small Cube" || action === "Large Cube") {
+                if (selectedSpecial && selectedSpecial !== action && counts[selectedSpecial] > 0) {
+                    // If another special action is selected, subtract it first
+                    counts[selectedSpecial] -= 1;
+                    score -= actions.find(a => a.name === selectedSpecial).points;
+                    updateUI(selectedSpecial);
+                }
+                selectedSpecial = action;
+            }
+
+            if (counts[action] + amount >= 0) {
+                counts[action] += amount;
+                score += amount * actionPoints;
+                updateUI(action);
+                updateScore();
+            }
+        }
+
+        function resetScore() {
+            score = 0;
+            selectedSpecial = null; // Reset special selection
+            for (let action in counts) {
+                counts[action] = 0;
+                updateUI(action);
+            }
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function updateUI(action) {
+            document.getElementById(`${action.replace(/ /g, '-')}-count`).textContent = counts[action];
+        }
+
+        // Create the adjustment rows on load
+        createAdjustmentRows();
+    </script>
+</body>
+</html>
+
+
