@@ -63,6 +63,22 @@
         .reset:hover {
             opacity: 0.8;
         }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: dodgerblue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            opacity: 0.8;
+        }
         hr {
             border: none;
             border-top: 1px solid #ccc;
@@ -71,13 +87,16 @@
     </style>
 </head>
 <body>
+    <a href="Index.html" class="back-button">Back</a>
     <div>
         <button class="reset" onclick="resetScore()">Reset</button>
         <div class="score" id="score">0</div>
         <div class="section" id="adjustments"></div>
     </div>
+
     <script>
         let score = 0;
+
         // Action details: name and point values
         const actions = [
             { name: "Takeoff", points: 10 },
@@ -91,7 +110,9 @@
             { name: "Small Cube", points: 40 },
             { name: "Large Cube", points: 25 },
         ];
+
         const counts = {};
+
         function createAdjustmentRows() {
             const adjustmentContainer = document.getElementById('adjustments');
             actions.forEach((action, index) => {
@@ -110,6 +131,7 @@
                 counts[action.name] = 0;
             });
         }
+
         function adjust(action, amount) {
             const actionPoints = actions.find(a => a.name === action).points;
             if (counts[action] + amount >= 0) {
@@ -119,6 +141,7 @@
                 updateScore();
             }
         }
+
         function resetScore() {
             score = 0;
             for (let action in counts) {
@@ -127,12 +150,15 @@
             }
             updateScore();
         }
+
         function updateScore() {
             document.getElementById('score').textContent = score;
         }
+
         function updateUI(action) {
             document.getElementById(`${action.replace(/ /g, '-')}-count`).textContent = counts[action];
         }
+
         // Create the adjustment rows on load
         createAdjustmentRows();
     </script>
