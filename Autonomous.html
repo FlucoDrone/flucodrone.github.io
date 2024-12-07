@@ -79,6 +79,42 @@
         .back-button:hover {
             opacity: 0.8;
         }
+        .submit-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: dodgerblue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .submit-button:hover {
+            opacity: 0.8;
+        }
+        .menu-popup {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #888;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .menu-popup select,
+        .menu-popup button {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+        }
         hr {
             border: none;
             border-top: 1px solid #ccc;
@@ -88,10 +124,56 @@
 </head>
 <body>
     <a href="index.html" class="back-button">Back</a>
+    <button class="submit-button" onclick="toggleMenu()">Submit</button>
     <div>
         <button class="reset" onclick="resetScore()">Reset</button>
         <div class="score" id="score">0</div>
         <div class="section" id="adjustments"></div>
+    </div>
+
+
+
+    <!-- Popup Menu -->
+    <div class="menu-popup" id="menuPopup">
+        <h3>Submit Score</h3>
+        <div>Current Score: <span id="currentScore">0</span></div>
+        
+        <br>
+        
+        <div style="padding: 20px; background: rgba(0, 0, 0, 0.8); color: white; border-radius: 10px; text-align: center;">
+    
+    
+    
+    <div style="padding: 20px; background: rgba(0, 0, 0, 0.8); color: white; border-radius: 10px; text-align: center;">
+    <form action="https://hook.us2.make.com/neyitahk25lmrwp94wp9zw62ywiqly2w" method="POST">
+        <input 
+            type="number" 
+            name="number" 
+            placeholder="Enter a number" 
+            style="width: 80%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: none;" 
+            required>
+        <select 
+            name="option" 
+            style="width: 80%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: none;" 
+            required>
+            <option value="" disabled selected>Select an option</option>
+            <option value="Supernova">Supernova</option>
+            <option value="Kuiper">Kuiper</option>
+            <option value="Jupiter">Jupiter</option>
+        </select>
+        <button 
+            type="submit" 
+            style="width: 80%; padding: 10px; background: dodgerblue; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Submit
+        </button>
+    </form>
+</div>
+
+    
+
+    
+</div>
+
     </div>
 
     <script>
@@ -159,7 +241,19 @@
             document.getElementById(`${action.replace(/ /g, '-')}-count`).textContent = counts[action];
         }
 
-        // Create the adjustment rows on load
+        function toggleMenu() {
+            document.getElementById('currentScore').textContent = score;
+            const popup = document.getElementById('menuPopup');
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function submitScore() {
+            const selectedTeam = document.getElementById('teamSelect').value;
+            alert(`Score submitted for ${selectedTeam}: ${score}`);
+            toggleMenu();
+            // Add server-side submission logic here if needed
+        }
+
         createAdjustmentRows();
     </script>
 </body>
