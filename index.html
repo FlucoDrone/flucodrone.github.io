@@ -20,7 +20,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
+            position: relative; /* Ensure positioning for the overlay */
         }
         .section:hover {
             filter: grayscale(0%);
@@ -28,16 +28,20 @@
             
              }
         .section1 {
-            height: 20%; /* 50% of the screen height */
+            height: 16%;
             background: url('https://i.imgur.com/yUnE1J4.jpeg') center / cover; /* Image for section 1 */
         }
         .section2 {
-            height: 40%; /* 50% of the screen height */
+            height: 28%;
             background: url('https://imgur.com/8wVb3qV.jpeg') center / cover; /* Image for section 2 */
         }
         .section3 {
-            height: 40%; /* 50% of the screen height */
+            height: 28%;
             background: url('https://i.imgur.com/GvMfykV.jpeg') center / cover; /* Image for section 3 */
+        }
+         .section4 {
+            height: 28%;
+            background: url('https://imgur.com/byMVuLJ.jpeg') center / cover; /* Image for section 4 */
         }
         .text {
             position: relative;
@@ -60,6 +64,9 @@
         </div>
         <div class="section section3" onclick="location.href='Autonomous.html'">
             <div class="text">Autonomous</div>
+        </div>
+        <div class="section section4" onclick="location.href='index.html'">
+            <div class="text">(Coming Soon)</div>
         </div>
    
     </div>
