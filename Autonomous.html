@@ -149,7 +149,7 @@
     <div style="padding: 20px; background: rgba(0, 0, 0, 0.8); color: white; border-radius: 10px; text-align: center;">
     <form action="https://hook.us2.make.com/neyitahk25lmrwp94wp9zw62ywiqly2w" method="POST">
         <input 
-            type="number" 
+            type="hidden" 
             name="number" 
             'value('${currentScore}')'
             placeholder="Enter a number" 
@@ -246,6 +246,7 @@
 
         function toggleMenu() {
             document.getElementById('currentScore').textContent = score;
+            document.querySelector('input[name="number"]').value = score; // Pre-fill the number box
             const popup = document.getElementById('menuPopup');
             popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
         }
