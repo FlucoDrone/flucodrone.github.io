@@ -533,15 +533,19 @@
 
 
         function toggleMenu() {
-
-             document.getElementById('currentScore').textContent = score;
-
+   
+            document.getElementById('currentScore').textContent = score;
+    
+            document.querySelector('input[name="number"]').value = score; // Pre-fill the number box
+    
             const popup = document.getElementById('menuPopup');
-
+    
             popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
 
         }
 
+
+        
         function submitScore() {
 
             const selectedTeam = document.getElementById('teamSelect').value;
