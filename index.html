@@ -28,14 +28,19 @@
         .section:hover {
             filter: grayscale(0%);
             background-color: rgba(0, 0, 0, 0.5); /* Overlay color on hover */
-        }
+            
+             }
         .section1 {
-            height: 50%; /* 50% of the screen height */
+            height: 20%; /* 50% of the screen height */
             background: url('https://drive.google.com/thumbnail?id=1l04eKldfdVdEAsKhVkBoXlQKrU2ltZ5w') center / cover; /* Image for section 1 */
         }
         .section2 {
-            height: 50%; /* 50% of the screen height */
-            background: url('https://drive.google.com/thumbnail?id=1HlRdKhfcsFxVOJt1BNFPVSEnr5-WfZnz') center / cover; /* Image for section 2 */
+            height: 40%; /* 50% of the screen height */
+            background: url('https://drive.google.com/thumbnail?id=1l04eKldfdVdEAsKhVkBoXlQKrU2ltZ5w') center / cover; /* Image for section 2 */
+        }
+        .section3 {
+            height: 40%; /* 50% of the screen height */
+            background: url('https://drive.google.com/thumbnail?id=1HlRdKhfcsFxVOJt1BNFPVSEnr5-WfZnz') center / cover; /* Image for section 3 */
         }
         .text {
             position: relative;
@@ -49,12 +54,17 @@
 </head>
 <body>
     <div class="container">
-        <div class="section section1" onclick="location.href='Piloting.html'">
+    
+    	<div class="section section1" onclick="location.href='Scoreboard.html'">
+            <div class="text">Scoreboard</div>
+        </div>
+        <div class="section section2" onclick="location.href='Piloting.html'">
             <div class="text">Piloting</div>
         </div>
-        <div class="section section2" onclick="location.href='Autonomous.html'">
+        <div class="section section3" onclick="location.href='Autonomous.html'">
             <div class="text">Autonomous</div>
         </div>
+   
     </div>
 
     <script>
@@ -64,6 +74,3 @@
     </script>
 </body>
 </html>
-
-
-
