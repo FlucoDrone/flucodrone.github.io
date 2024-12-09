@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 60px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 60px;
+        }
+        th, td {
+            border: none;
+            padding: 8px;
+            text-align: left;
+            text-align: center; /* Centers text horizontally */
+    		vertical-align: middle; /* Centers text vertically */
+            font-size: 28px;
+            font-weight: bold;
+        }
+        th {
+            background-color: #1E90FF;
+            color: white; /* White text */
+    		font-size: 36px; /* Adjust font size */
+    		font-weight: bold; /* Make text bold */
+            border: none;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: dodgerblue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" target="_self" class="back-button">Back</a>
+    <center><h1>Skills Scores</h1>
+    <div id="sheet-data">Loading data...</div></center>
+
+    <script>
+        const jsonUrl = 'https://script.google.com/macros/s/AKfycbxzPqQT_kJP2woZb4HtwCsA50Jn7j7knyjs5PbotqW3FhyqoyLYNOX-gYo1iCUXEn-Evw/exec'; // Replace with your deployed Apps Script URL
+
+        async function fetchSheetData() {
+            try {
+                const response = await fetch(jsonUrl);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch the Google Sheet data');
+                }
+                const jsonData = await response.json();
+                displayData(jsonData);
+            } catch (error) {
+                document.getElementById('sheet-data').innerHTML = `<p>Error loading data: ${error.message}</p>`;
+            }
+        }
+
+        function displayData(data) {
+            if (!data || data.length === 0) {
+                document.getElementById('sheet-data').innerHTML = '<p>No data available.</p>';
+                return;
+            }
+
+            let tableHTML = '<table><thead><tr>';
+            const headers = Object.keys(data[0]);
+            headers.forEach(header => tableHTML += `<th>${header}</th>`);
+            tableHTML += '</tr></thead><tbody>';
+            data.forEach(row => {
+                tableHTML += '<tr>';
+                headers.forEach(header => tableHTML += `<td>${row[header]}</td>`);
+                tableHTML += '</tr>';
+            });
+            tableHTML += '</tbody></table>';
+            document.getElementById('sheet-data').innerHTML = tableHTML;
+        }
+
+        // Initial fetch and then repeat every 10 seconds
+        fetchSheetData();
+        setInterval(fetchSheetData, 1000);
+    </script>
+</body>
+</html>
