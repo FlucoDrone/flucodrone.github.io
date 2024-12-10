@@ -80,7 +80,7 @@
 
     clearButton.addEventListener("click", async () => {
       try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxh0fYxwOaU7_Hfm13Ce_q2ZtFVpDR2Gk1PocIjn2x3h-ae_t6VgA3wSLqfSrbH1bakZg/exec', { // Replace with the Google Apps Script Web App URL
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzsjSzBoN5jTMyWYOvj8lvGz6jPc5kXeoCK4oDBMj9UgMV7UAKzOvJdHJG6oy6VeBeofg/exec', { // Replace with the Google Apps Script Web App URL
           method: 'POST'
         });
         const result = await response.json();
@@ -97,7 +97,7 @@
         
         
         
-        const jsonUrl = 'https://script.google.com/macros/s/AKfycbxh0fYxwOaU7_Hfm13Ce_q2ZtFVpDR2Gk1PocIjn2x3h-ae_t6VgA3wSLqfSrbH1bakZg/exec'; // Replace with your deployed Apps Script URL
+        const jsonUrl = 'https://script.google.com/macros/s/AKfycbzsjSzBoN5jTMyWYOvj8lvGz6jPc5kXeoCK4oDBMj9UgMV7UAKzOvJdHJG6oy6VeBeofg/exec'; // Replace with your deployed Apps Script URL
 
         async function fetchSheetData() {
             try {
