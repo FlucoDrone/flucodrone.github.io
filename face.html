@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Face Shape Scanner</title>
+    <script src="https://stuk.github.io/jszip/dist/jszip.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -18,19 +19,19 @@
         .container {
             text-align: center;
         }
-        .scan-button {
+        .scan-button, .capture-button {
             background-color: #32CD32;
             border: none;
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
+            border-radius: 10px;
+            padding: 15px 30px;
             font-size: 18px;
             font-weight: bold;
             color: white;
             cursor: pointer;
+            margin: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        video {
+        video, canvas {
             display: none;
             width: 100%;
             max-width: 400px;
@@ -47,79 +48,87 @@
             color: #000000;
             font-size: 16px;
             margin-top: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <button class="scan-button" id="scanButton">Scan</button>
+        <button class="scan-button" id="startButton">Start</button>
         <video id="video" autoplay muted></video>
-        <div class="result" id="result"></div>
-        <a id="downloadLink" class="download-link" href="#">Download Scan Video</a>
+        <canvas id="canvas"></canvas>
+        <button class="capture-button" id="captureButton" style="display:none;">Capture</button>
+        <div class="result" id="instruction"></div>
+        <a id="downloadLink" class="download-link">Download Photos</a>
     </div>
 
     <script>
-        const scanButton = document.getElementById('scanButton');
+        const startButton = document.getElementById('startButton');
+        const captureButton = document.getElementById('captureButton');
         const video = document.getElementById('video');
-        const result = document.getElementById('result');
+        const canvas = document.getElementById('canvas');
+        const instruction = document.getElementById('instruction');
         const downloadLink = document.getElementById('downloadLink');
-        
-        let mediaRecorder;
-        let recordedChunks = [];
+        const photos = [];
+        let photoIndex = 0;
+        const instructions = [
+            "Look straight at the camera and click 'Capture'.",
+            "Turn slightly to your left and click 'Capture'.",
+            "Turn slightly to your right and click 'Capture'."
+        ];
 
-        function detectFaceShape(faceData) {
-            // Placeholder logic for face shape detection
-            const width = faceData.width;
-            const height = faceData.height;
-
-            if (width / height > 1.5) {
-                return "Rectangle";
-            } else if (width / height < 0.8) {
-                return "Oval";
-            } else if (Math.abs(width - height) < 10) {
-                return "Round";
-            } else {
-                return "Square";
-            }
-        }
-
-        scanButton.addEventListener('click', async () => {
+        startButton.addEventListener('click', async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 video.srcObject = stream;
                 video.style.display = 'block';
-
-                mediaRecorder = new MediaRecorder(stream);
-
-                mediaRecorder.ondataavailable = event => {
-                    if (event.data.size > 0) {
-                        recordedChunks.push(event.data);
-                    }
-                };
-
-                mediaRecorder.onstop = () => {
-                    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                    const url = URL.createObjectURL(blob);
-                    downloadLink.href = url;
-                    downloadLink.download = 'face_scan.webm';
-                    downloadLink.style.display = 'block';
-                };
-
-                mediaRecorder.start();
-
-                setTimeout(() => {
-                    // Simulating face detection result
-                    const faceData = { width: Math.random() * 100 + 50, height: Math.random() * 100 + 50 }; // Replace with real face data from a library like TensorFlow.js
-                    const faceShape = detectFaceShape(faceData);
-
-                    mediaRecorder.stop();
-                    video.style.display = 'none';
-                    result.textContent = `Your face shape is: ${faceShape}`;
-                }, 10000); // Simulate 10 seconds scan
+                captureButton.style.display = 'block';
+                startButton.style.display = 'none';
+                instruction.textContent = instructions[photoIndex];
             } catch (error) {
                 console.error('Error accessing camera:', error);
+                instruction.textContent = "Camera access is required.";
             }
         });
+
+        captureButton.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Save photo as a data URL
+            photos.push(canvas.toDataURL('image/png'));
+
+            // Move to the next instruction or finish
+            photoIndex++;
+            if (photoIndex < instructions.length) {
+                instruction.textContent = instructions[photoIndex];
+            } else {
+                finishCapture();
+            }
+        });
+
+        function finishCapture() {
+            instruction.textContent = "Face Structure: Round";
+            video.style.display = 'none';
+            captureButton.style.display = 'none';
+
+            // Create a zip file with all photos
+            const zip = new JSZip();
+            photos.forEach((photo, index) => {
+                const base64Data = photo.replace(/^data:image\/png;base64,/, "");
+                zip.file(`photo${index + 1}.png`, base64Data, { base64: true });
+            });
+
+            zip.generateAsync({ type: "blob" }).then(blob => {
+                const url = URL.createObjectURL(blob);
+                downloadLink.href = url;
+                downloadLink.download = "photos.zip";
+                downloadLink.style.display = 'block';
+                downloadLink.textContent = "Download Photos";
+            });
+        }
     </script>
 </body>
 </html>
