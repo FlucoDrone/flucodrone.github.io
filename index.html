@@ -18,68 +18,64 @@
         }
         .container {
             display: flex;
-            flex-direction: column; /* Vertical stacking of parts */
+            flex-direction: column;
             height: 100%;
         }
         .section {
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative; /* Ensure positioning for the overlay */
+            position: relative;
+            flex-grow: 1;
         }
         .section:hover {
             filter: grayscale(0%);
-            background-color: rgba(0, 0, 0, 0.5); /* Overlay color on hover */
-            
-             }
-        .section1 {
-            height: 16%;
-            background: url('https://i.imgur.com/yUnE1J4.jpeg') center / cover; /* Image for section 1 */
+            background-color: rgba(0, 0, 0, 0.5);
         }
-        .section2 {
-            height: 28%;
-            background: url('https://i.imgur.com/8wVb3qV.jpeg') center / cover; /* Image for section 2 */
-        }
-        .section3 {
-            height: 28%;
-            background: url('https://i.imgur.com/GvMfykV.jpeg') center / cover; /* Image for section 3 */
-        }
-         .section4 {
-            height: 28%;
-            background: url('https://i.imgur.com/byMVuLJ.jpeg') center / cover; /* Image for section 4 */
-        }
-        .text {
+        .section .text {
             position: relative;
-            z-index: 3; /* Ensure text is above the overlay */
+            z-index: 3;
             color: white;
-            font-size: 3rem; /* Font size as specified */
+            font-size: 3rem;
             font-weight: bold;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-    
-    	<div class="section section1" onclick="location.href='Scoreboard.html'">
-            <div class="text">Scoreboard</div>
-        </div>
-        <div class="section section2" onclick="location.href='Piloting.html'">
-            <div class="text">Piloting</div>
-        </div>
-        <div class="section section3" onclick="location.href='Autonomous.html'">
-            <div class="text">Autonomous</div>
-        </div>
-        <div class="section section4" onclick="location.href='Teamwork.html'">
-            <div class="text">Teamwork</div>
-        </div>
-   
-    </div>
+    <div class="container" id="sectionsContainer"></div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <script>
-        function openWindow(page) {
-            window.open(page, "_blank", "width=" + (screen.width * 0.8) + ",height=" + (screen.height * 0.8));
+        async function loadConfig() {
+            // Fetch the config.yml file
+            const response = await fetch('config.yml');
+            const yamlText = await response.text();
+
+            // Parse YAML into JavaScript object
+            const config = jsyaml.load(yamlText);
+
+            // Get the container div
+            const container = document.getElementById('sectionsContainer');
+
+            // Generate sections dynamically
+            config.sections.forEach(section => {
+                const div = document.createElement('div');
+                div.className = 'section';
+                div.style.background = `url('${section.image}') center / cover`;
+                div.onclick = () => location.href = section.link;
+
+                const textDiv = document.createElement('div');
+                textDiv.className = 'text';
+                textDiv.textContent = section.name;
+
+                div.appendChild(textDiv);
+                container.appendChild(div);
+            });
         }
+
+        // Load the configuration on page load
+        loadConfig();
     </script>
 </body>
 </html>
