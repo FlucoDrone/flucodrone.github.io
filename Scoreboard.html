@@ -34,22 +34,6 @@
             font-weight: bold; /* Make text bold */
             border: none;
         }
-        .back-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: dodgerblue;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .back-button:hover {
-            opacity: 0.8;
-        }
         .scoreboard-container {
             position: relative;
             margin-bottom: 60px; /* To provide space for the content */
@@ -79,7 +63,7 @@
         /* Make the clear buttons stay at the bottom of the page */
         .clear-buttons-at-bottom {
             position: absolute;
-            bottom: 10px;
+            top: 0px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -87,9 +71,19 @@
         }
     </style>
 </head>
-<body>
-    <a href="index.html" target="_self" class="back-button">Back</a>
-    
+<body>    
+    <!-- Clear buttons at the bottom of the page -->
+    <div class="clear-buttons-at-bottom">
+        <button class="clearButton" id="clearButton1">Clear Skills Scoreboard</button>
+        <button class="clearButton" id="clearButton2">Clear Teamwork Scoreboard</button>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
     <!-- First scoreboard container -->
     <div class="scoreboard-container" id="scoreboard1">
         <center><h2>Skills Scoreboard</h2></center>
@@ -100,12 +94,6 @@
     <div class="scoreboard-container" id="scoreboard2">
         <center><h2>Teamwork Scoreboard</h2></center>
         <center><div id="sheet-data-2">Loading data...</div></center>
-    </div>
-
-    <!-- Clear buttons at the bottom of the page -->
-    <div class="clear-buttons-at-bottom">
-        <button class="clearButton" id="clearButton1">Clear Skills Scoreboard</button>
-        <button class="clearButton" id="clearButton2">Clear Teamwork Scoreboard</button>
     </div>
 
     <script>
