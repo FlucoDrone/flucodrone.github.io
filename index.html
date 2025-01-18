@@ -1,5 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+<body>
+<script>
+        const config = {
+            siteTitle: "Scoring Select",
+            sections: [
+                {
+                    name: "Scoreboard",
+                    link: "Scoreboard.html",
+                    image: "https://i.imgur.com/yUnE1J4.jpeg",
+                },
+                {
+                    name: "Piloting",
+                    link: "Piloting.html",
+                    image: "https://i.imgur.com/8wVb3qV.jpeg",
+                },
+                {
+                    name: "Autonomous",
+                    link: "Autonomous.html",
+                    image: "https://i.imgur.com/GvMfykV.jpeg",
+                },
+                {
+                    name: "Teamwork",
+                    link: "Teamwork.html",
+                    image: "https://i.imgur.com/MkB91eO.jpeg",
+                },
+            ],
+        };
+    </script>
+</body>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +39,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Scoring Select</title>
     <style>
+        /* Editable Styles (User-Friendly) */
         body, html {
             margin: 0;
             padding: 0;
@@ -43,39 +73,27 @@
     </style>
 </head>
 <body>
+    <!-- Dynamic HTML Content -->
     <div class="container" id="sectionsContainer"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <script>
-        async function loadConfig() {
-            // Fetch the config.yml file
-            const response = await fetch('config.yml');
-            const yamlText = await response.text();
+        document.title = config.siteTitle; // Set the document title dynamically
 
-            // Parse YAML into JavaScript object
-            const config = jsyaml.load(yamlText);
+        // Load sections dynamically from the config
+        const container = document.getElementById("sectionsContainer");
+        config.sections.forEach((section) => {
+            const div = document.createElement("div");
+            div.className = "section";
+            div.style.background = `url('${section.image}') center / cover`;
+            div.onclick = () => location.href = section.link;
 
-            // Get the container div
-            const container = document.getElementById('sectionsContainer');
+            const textDiv = document.createElement("div");
+            textDiv.className = "text";
+            textDiv.textContent = section.name;
 
-            // Generate sections dynamically
-            config.sections.forEach(section => {
-                const div = document.createElement('div');
-                div.className = 'section';
-                div.style.background = `url('${section.image}') center / cover`;
-                div.onclick = () => location.href = section.link;
-
-                const textDiv = document.createElement('div');
-                textDiv.className = 'text';
-                textDiv.textContent = section.name;
-
-                div.appendChild(textDiv);
-                container.appendChild(div);
-            });
-        }
-
-        // Load the configuration on page load
-        loadConfig();
+            div.appendChild(textDiv);
+            container.appendChild(div);
+        });
     </script>
 </body>
 </html>
