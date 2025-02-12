@@ -314,8 +314,14 @@
       document.getElementById('seconds').innerText = textSeconds;
     };
 
-    setInterval(countdown, 1000);
-    countdown(); // Initial call to avoid delay
+    // Check if it's already February 14
+    const now = new Date();
+    if (now.getMonth() === 1 && now.getDate() === 14) {
+      activateCelebrateMode();
+    } else {
+      setInterval(countdown, 1000);
+      countdown(); // Initial call to avoid delay
+    }
   </script>
 </body>
 </html>
