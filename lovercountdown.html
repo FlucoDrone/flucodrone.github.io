@@ -256,15 +256,14 @@
       </div>
     </div>
     <div class="celebrate-mode">
-      <h2>Happy Valentine's Day!</h2>
-      <p>To my lover boy, Dannle 🩵<br><br>You mean so much to me. Thank you for celebrating this valentines day with me, and putting up with my autism for this damn long. I love you so much, mwaahhhhhh.</p>
+      <h2>Happy Lover Day!</h2>
+      <p>To my lover boy, Dannle 🩵<br><br>You mean so much to me. Thank you for celebrating this day with me, and putting up with my autism for this damn long. I love you so much, mwaahhhhhh.</p>
     </div>
   </div>
 
   <script>
     const countdownMode = document.querySelector('.countdown-mode');
     const celebrateMode = document.querySelector('.celebrate-mode');
-    const testButton = document.querySelector('.test-button');
 
     const activateCelebrateMode = () => {
       countdownMode.style.display = 'none';
@@ -284,15 +283,16 @@
     const countdown = () => {
       const now = new Date();
       const currentYear = now.getFullYear();
-      let valentinesDay = new Date(currentYear, 1, 14); // February is month 1 (0-indexed)
+      let loverDay = new Date(currentYear, 1, 14); // February 14 (0-indexed)
 
-      // If Valentine's Day has already passed this year, set it to next year
-      if (now > valentinesDay) {
-        valentinesDay = new Date(currentYear + 1, 1, 14);
+      // If Lover Day has already passed this year, set it to next year
+      if (now > loverDay) {
+        loverDay.setFullYear(currentYear + 1);
       }
 
-      const difference = valentinesDay - now;
+      const difference = loverDay - now;
 
+      // If it's Lover Day, activate celebrate mode
       if (difference <= 0) {
         activateCelebrateMode();
         return;
@@ -316,7 +316,6 @@
 
     setInterval(countdown, 1000);
     countdown(); // Initial call to avoid delay
-
   </script>
 </body>
 </html>
