@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lover Boy Countdown</title>
+  <title>Lover Day Clock 🩵🩵🩵</title>
   <style>
     body {
       margin: 0;
@@ -16,6 +16,7 @@
       font-family: 'Arial', sans-serif;
       color: white;
       overflow: hidden;
+      position: relative;
     }
 
     .container {
@@ -29,6 +30,8 @@
       width: 90%;
       max-width: 500px;
       margin: 20px;
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
@@ -63,6 +66,42 @@
       display: block;
       margin-top: 5px;
       color: rgba(255, 255, 255, 0.8);
+    }
+
+    .celebrate-mode {
+      display: none;
+      text-align: center;
+    }
+
+    .celebrate-mode h2 {
+      font-size: 3rem;
+      animation: float 2s ease-in-out infinite;
+      text-shadow: 0 0 10px #ff0077, 0 0 20px #ff0077, 0 0 30px #ff0077;
+    }
+
+    .celebrate-mode p {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .test-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.3);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: 0 0 10px rgba(255, 0, 119, 0.5);
+    }
+
+    .test-button:hover {
+      background: rgba(255, 255, 255, 0.5);
     }
 
     @keyframes fadeIn {
@@ -160,6 +199,24 @@
       }
     }
 
+    /* Confetti animation */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #ff0077;
+      animation: confetti-fall 5s linear infinite;
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+      }
+    }
+
     /* Mobile-specific adjustments */
     @media (max-width: 600px) {
       h1 {
@@ -175,6 +232,14 @@
       .countdown span {
         font-size: 0.7rem;
       }
+
+      .celebrate-mode h2 {
+        font-size: 2rem;
+      }
+
+      .celebrate-mode p {
+        font-size: 1.2rem;
+      }
     }
   </style>
 </head>
@@ -187,29 +252,55 @@
     <span></span>
   </div>
   <div class="container">
-    <h1>Ollie & Dannle</h1>
-    <p>Countdown to our first Valentine's Day! 💖</p>
-    <div class="countdown">
-      <div>
-        <span id="days">00</span>
-        <span>Days</span>
-      </div>
-      <div>
-        <span id="hours">00</span>
-        <span>Hours</span>
-      </div>
-      <div>
-        <span id="minutes">00</span>
-        <span>Minutes</span>
-      </div>
-      <div>
-        <span id="seconds">00</span>
-        <span>Seconds</span>
+    <div class="countdown-mode">
+      <h1>Ollie & Dannle</h1>
+      <p style="font-size: .9rem;">Countdown to our first lover day! 🩵</p>
+      <div class="countdown">
+        <div>
+          <span id="days">00</span>
+          <span>Days</span>
+        </div>
+        <div>
+          <span id="hours">00</span>
+          <span>Hours</span>
+        </div>
+        <div>
+          <span id="minutes">00</span>
+          <span>Minutes</span>
+        </div>
+        <div>
+          <span id="seconds">00</span>
+          <span>Seconds</span>
+        </div>
       </div>
     </div>
+    <div class="celebrate-mode">
+      <h2>Happy Valentine's Day!</h2>
+      <p>To my lover boy, Dannle 🩵<br><br>You mean so much to me. Thank you for celebrating this valentines day with me, and putting up with my autism for this damn long. I love you so much, mwaahhhhhh.</p>
+    </div>
   </div>
+  <button class="test-button">Test Celebrate Mode</button>
 
   <script>
+    const countdownMode = document.querySelector('.countdown-mode');
+    const celebrateMode = document.querySelector('.celebrate-mode');
+    const testButton = document.querySelector('.test-button');
+
+    const activateCelebrateMode = () => {
+      countdownMode.style.display = 'none';
+      celebrateMode.style.display = 'block';
+
+      // Add confetti
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+        document.body.appendChild(confetti);
+      }
+    };
+
     const countdown = () => {
       const now = new Date();
       const currentYear = now.getFullYear();
@@ -221,6 +312,11 @@
       }
 
       const difference = valentinesDay - now;
+
+      if (difference <= 0) {
+        activateCelebrateMode();
+        return;
+      }
 
       const seconds = 1000;
       const minutes = seconds * 60;
@@ -240,6 +336,9 @@
 
     setInterval(countdown, 1000);
     countdown(); // Initial call to avoid delay
+
+    // Test button to activate celebrate mode
+    testButton.addEventListener('click', activateCelebrateMode);
   </script>
 </body>
 </html>
