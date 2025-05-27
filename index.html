@@ -1,98 +1,534 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
-<script>
-        const config = {
-            siteTitle: "Scoring Select",
-            sections: [
-                {
-                    name: "Scoreboard",
-                    link: "Scoreboard.html",
-                    image: "https://i.imgur.com/yUnE1J4.jpeg",
-                },
-                {
-                    name: "Piloting",
-                    link: "Piloting.html",
-                    image: "https://i.imgur.com/8wVb3qV.jpeg",
-                },
-                {
-                    name: "Autonomous",
-                    link: "Autonomous.html",
-                    image: "https://i.imgur.com/GvMfykV.jpeg",
-                },
-                {
-                    name: "Teamwork",
-                    link: "Teamwork.html",
-                    image: "https://i.imgur.com/MkB91eO.jpeg",
-                },
-            ],
-        };
-    </script>
-</body>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Fluco Drone">
     <meta name="apple-mobile-web-app-title" content="Fluco Drone" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-touch-fullscreen" content="yes">
     <title>Scoring Select</title>
     <style>
-        /* Editable Styles (User-Friendly) */
-        body, html {
+        * {
             margin: 0;
             padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
         }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .info-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .info-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .info-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 90%;
+            max-width: 500px;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: popupAppear 0.3s ease-out;
+            border: 3px solid #ffd700;
+        }
+
+        @keyframes popupAppear {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .popup-header h3 {
+            color: #ffd700;
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .close-btn:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+
+        .info-popup .info-content {
+            color: #ecf0f1;
+        }
+
+        .info-popup .info-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .info-popup .credits {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .info-popup .credits h4 {
+            color: #ffd700;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .info-popup .credits p {
+            font-size: 0.95rem;
+            color: rgba(236, 240, 241, 0.8);
+            margin-bottom: 8px;
+        }
+
         .container {
             display: flex;
             flex-direction: column;
-            height: 100%;
+            height: 100vh;
         }
+
         .section {
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            flex-grow: 1;
+            flex: 1;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow: hidden;
         }
-        .section:hover {
-            filter: grayscale(0%);
-            background-color: rgba(0, 0, 0, 0.5);
+
+        .bottom-split {
+            display: flex;
+            flex: 1;
         }
-        .section .text {
+
+        .bottom-half {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
-            z-index: 3;
-            color: white;
-            font-size: 3rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            overflow: hidden;
         }
+
+        .info-section {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-left: 3px solid rgba(255, 215, 0, 0.5);
+        }
+
+        .section::before,
+        .bottom-half::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        .teamwork-section::before {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.4), rgba(200, 35, 51, 0.4));
+        }
+
+        .piloting-section::before {
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.4), rgba(42, 82, 152, 0.4));
+        }
+
+        .autonomous-section::before {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.4), rgba(32, 201, 151, 0.4));
+        }
+
+        .scoreboard-half::before {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.4), rgba(255, 237, 78, 0.4));
+        }
+
+        .info-section::before {
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.3), rgba(52, 73, 94, 0.3));
+        }
+
+        .section:hover::before,
+        .bottom-half:hover::before {
+            opacity: 0.2;
+        }
+
+        .teamwork-section:hover::before {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(200, 35, 51, 0.2));
+        }
+
+        .piloting-section:hover::before {
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.2), rgba(42, 82, 152, 0.2));
+        }
+
+        .autonomous-section:hover::before {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.2), rgba(32, 201, 151, 0.2));
+        }
+
+        .scoreboard-half:hover::before {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 237, 78, 0.2));
+        }
+
+        .section:hover,
+        .bottom-half:hover {
+            transform: scale(1.02);
+            z-index: 5;
+            box-shadow: inset 0 0 50px rgba(255, 215, 0, 0.3);
+        }
+
+        .info-section .section-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+        }
+
+        .info-section .section-icon {
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.5));
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        .info-section h2 {
+            color: #ecf0f1;
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            color: rgba(236, 240, 241, 0.9);
+            font-size: 0.95rem;
+            font-weight: 400;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .info-section .credits {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .info-section .credits h3 {
+            color: #ffd700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .info-section .credits p {
+            font-size: 0.8rem;
+            color: rgba(236, 240, 241, 0.7);
+            margin-bottom: 5px;
+        }
+
+        .section-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+
+        .section:hover .section-content {
+            transform: scale(1.1);
+        }
+
+        .section-icon {
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.5));
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .section h2 {
+            color: white;
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .scoreboard-half h2 {
+            color: #1e3c72;
+            text-shadow: 0 4px 20px rgba(30, 60, 114, 0.5);
+        }
+
+        .section p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.7);
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        .scoreboard-half p {
+            color: rgba(30, 60, 114, 0.9);
+            text-shadow: 0 2px 15px rgba(30, 60, 114, 0.3);
+        }
+
+        /* Animated border effect */
+        .section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid transparent;
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.6), transparent, rgba(255, 215, 0, 0.6));
+            background-size: 200% 200%;
+            animation: borderMove 4s ease-in-out infinite;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .section:hover::after {
+            opacity: 1;
+        }
+
+        @keyframes borderMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @media (max-width: 768px) {
+            .info-button {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+
+            .bottom-split {
+                flex-direction: column;
+            }
+
+            .section h2,
+            .info-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .section p,
+            .info-section p {
+                font-size: 1rem;
+            }
+
+            .section-icon {
+                font-size: 2.8rem;
+            }
+
+            .info-section .credits h3 {
+                font-size: 1rem;
+            }
+
+            .info-section .credits p {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .info-button {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .section h2,
+            .info-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .section p,
+            .info-section p {
+                font-size: 0.9rem;
+            }
+
+            .section-icon {
+                font-size: 2.5rem;
+            }
+
+            .info-section .credits h3 {
+                font-size: 0.9rem;
+            }
+
+            .info-section .credits p {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
     </style>
 </head>
 <body>
-    <!-- Dynamic HTML Content -->
-    <div class="container" id="sectionsContainer"></div>
+    <!-- Info Button -->
+    <button class="info-button" onclick="toggleInfoPopup()">ℹ️</button>
+
+    <!-- Info Popup -->
+    <div class="info-popup" id="infoPopup">
+        <div class="popup-header">
+            <h3>Fluco Drone Info</h3>
+            <button class="close-btn" onclick="toggleInfoPopup()">×</button>
+        </div>
+        <div class="info-content">
+            <p><strong>Fluco Drone Competition System (Ver. 103)</strong></p>
+            <p>A student designed scoring and score tracking system.</p>
+            
+            <div class="credits">
+                <h4>Credits:</h4>
+                <p>Coding: KenazEnigma</p>
+                <p>Website Hosting: GitHub Pages</p>
+                <p>Image Hosting: Imgur Raw</p>
+                <p>Webwooks: Google App Script</p>
+                <p>Data Storage: Google Sheets</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section" style="background-image: url('https://i.imgur.com/yUnE1J4.jpeg')" onclick="location.href='Scoreboard.html'">
+            <div class="section-content">
+                <div class="section-icon">🏆</div>
+                <h2>Scoreboard</h2>
+                <p>Live results</p>
+            </div>
+        </div>
+
+        <div class="section" style="background-image: url('https://i.imgur.com/8wVb3qV.jpeg')" onclick="location.href='Piloting.html'">
+            <div class="section-content">
+                <div class="section-icon">🎮</div>
+                <h2>Piloting</h2>
+                <p>Manual flight skills scoring</p>
+            </div>
+        </div>
+
+        <div class="section" style="background-image: url('https://i.imgur.com/GvMfykV.jpeg')" onclick="location.href='Autonomous.html'">
+            <div class="section-content">
+                <div class="section-icon">🤖</div>
+                <h2>Autonomous</h2>
+                <p>Programmed flight scoring</p>
+            </div>
+        </div>
+
+        <div class="section" style="background-image: url('https://i.imgur.com/MkB91eO.jpeg')" onclick="location.href='Teamwork.html'">
+            <div class="section-content">
+                <div class="section-icon">🤝</div>
+                <h2>Teamwork</h2>
+                <p>Team challenge scoring</p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        document.title = config.siteTitle; // Set the document title dynamically
+        // Toggle info popup
+        function toggleInfoPopup() {
+            const popup = document.getElementById('infoPopup');
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        }
 
-        // Load sections dynamically from the config
-        const container = document.getElementById("sectionsContainer");
-        config.sections.forEach((section) => {
-            const div = document.createElement("div");
-            div.className = "section";
-            div.style.background = `url('${section.image}') center / cover`;
-            div.onclick = () => location.href = section.link;
-
-            const textDiv = document.createElement("div");
-            textDiv.className = "text";
-            textDiv.textContent = section.name;
-
-            div.appendChild(textDiv);
-            container.appendChild(div);
+        // Add touch feedback for mobile
+        document.querySelectorAll('.section').forEach(section => {
+            section.addEventListener('touchstart', function() {
+                this.style.transform = 'translateY(-4px) scale(1.01)';
+            });
+            
+            section.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
         });
     </script>
 </body>
