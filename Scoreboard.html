@@ -433,12 +433,12 @@
 <body>    
     <div class="header">
         <a href="index.html" class="back-button">← Back</a>
-        <h1>🏆 Competition Scoreboard</h1>
+        <h1>🏆 Scoreboards</h1>
         <p class="subtitle">Live Drone Competition Results</p>
     </div>
 
     <div class="scoreboard-container" id="scoreboard1">
-        <h2>🎯 Skills Scoreboard</h2>
+        <h2>Skills Scoreboard</h2>
         <div class="table-container">
             <div id="sheet-data-1">
                 <div class="loading">Loading skills data...</div>
@@ -447,7 +447,7 @@
     </div>
 
     <div class="scoreboard-container" id="scoreboard2">
-        <h2>🤝 Teamwork Scoreboard</h2>
+        <h2>Teamwork Scoreboard</h2>
         <div class="table-container">
             <div id="sheet-data-2">
                 <div class="loading">Loading teamwork data...</div>
@@ -455,7 +455,7 @@
         </div>
     </div>
 
-    <button class="main-clear-button" onclick="toggleClearPopup()">🗑️ Clear Scoreboards</button>
+    <button class="main-clear-button" onclick="toggleClearPopup()">Clear Scoreboards</button>
 
     <!-- Clear Popup -->
     <div class="clear-popup" id="clearPopup">
@@ -464,12 +464,34 @@
             <button class="close-btn" onclick="toggleClearPopup()">×</button>
         </div>
         <div class="popup-buttons">
-            <button class="clear-button" id="clearButton1">🗑️ Clear Skills Scoreboard</button>
-            <button class="clear-button" id="clearButton2">🗑️ Clear Teamwork Scoreboard</button>
+            <button class="clear-button" id="clearButton1">Clear Skills Scoreboard</button>
+            <button class="clear-button" id="clearButton2">Clear Teamwork Scoreboard</button>
         </div>
     </div>
 
     <script>
+        // Function to clean cell values - replace errors with empty string
+        function cleanCellValue(value) {
+            if (value === null || value === undefined) {
+                return '';
+            }
+            
+            const stringValue = String(value).trim();
+            
+            // Check if it's an error value (starts with # or contains ERROR)
+            if (stringValue.startsWith('#') || stringValue.toUpperCase().includes('ERROR')) {
+                return '';
+            }
+            
+            // Check if it's a pure number (including decimals and negative numbers)
+            if (/^-?\d+\.?\d*$/.test(stringValue)) {
+                return stringValue;
+            }
+            
+            // If it's not a number and not an error, return as is (for text like team names)
+            return stringValue;
+        }
+
         // Function to fetch and display data for Scoreboard 1
         const jsonUrl1 = 'https://script.google.com/macros/s/AKfycbyYfZD_qRlFuciEIrXGSuRAZqYrBQ1iBon8UUDqrYviiFDzhxZ2h_hIw69Fd05A3pu93g/exec';
 
@@ -498,7 +520,10 @@
             tableHTML += '</tr></thead><tbody>';
             data.forEach(row => {
                 tableHTML += '<tr>';
-                headers.forEach(header => tableHTML += `<td>${row[header] || ''}</td>`);
+                headers.forEach(header => {
+                    const cleanedValue = cleanCellValue(row[header]);
+                    tableHTML += `<td>${cleanedValue}</td>`;
+                });
                 tableHTML += '</tr>';
             });
             tableHTML += '</tbody></table>';
@@ -533,7 +558,10 @@
             tableHTML += '</tr></thead><tbody>';
             data.forEach(row => {
                 tableHTML += '<tr>';
-                headers.forEach(header => tableHTML += `<td>${row[header] || ''}</td>`);
+                headers.forEach(header => {
+                    const cleanedValue = cleanCellValue(row[header]);
+                    tableHTML += `<td>${cleanedValue}</td>`;
+                });
                 tableHTML += '</tr>';
             });
             tableHTML += '</tbody></table>';
@@ -554,7 +582,7 @@
             }
             
             clearButton1.disabled = true;
-            clearButton1.textContent = '🔄 Clearing...';
+            clearButton1.textContent = 'Clearing...';
             
             try {
                 const response = await fetch('https://script.google.com/macros/s/AKfycbyYfZD_qRlFuciEIrXGSuRAZqYrBQ1iBon8UUDqrYviiFDzhxZ2h_hIw69Fd05A3pu93g/exec', {
@@ -562,18 +590,18 @@
                 });
                 const result = await response.json();
                 if (result.success) {
-                    alert('✅ Skills scoreboard cleared successfully!');
+                    alert('Skills scoreboard cleared successfully!');
                     fetchSheetData1(); // Refresh data
                     toggleClearPopup(); // Close popup
                 } else {
-                    alert('❌ Failed to clear Skills scoreboard.');
+                    alert('Failed to clear Skills scoreboard.');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('❌ An error occurred while clearing Skills scoreboard.');
+                alert('An error occurred while clearing Skills scoreboard.');
             } finally {
                 clearButton1.disabled = false;
-                clearButton1.textContent = '🗑️ Clear Skills Scoreboard';
+                clearButton1.textContent = 'Clear Skills Scoreboard';
             }
         });
 
@@ -584,7 +612,7 @@
             }
             
             clearButton2.disabled = true;
-            clearButton2.textContent = '🔄 Clearing...';
+            clearButton2.textContent = 'Clearing...';
             
             try {
                 const response = await fetch('https://script.google.com/macros/s/AKfycbzLQ08fPCWn5RbLyyvM0ASrISpbGgbEQWwh0cRf_lG1rEvl-fM6nI9x0-Sl3F_4Rec/exec', {
@@ -592,18 +620,18 @@
                 });
                 const result = await response.json();
                 if (result.success) {
-                    alert('✅ Teamwork scoreboard cleared successfully!');
+                    alert('Teamwork scoreboard cleared successfully!');
                     fetchSheetData2(); // Refresh data
                     toggleClearPopup(); // Close popup
                 } else {
-                    alert('❌ Failed to clear Teamwork scoreboard.');
+                    alert('Failed to clear Teamwork scoreboard.');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('❌ An error occurred while clearing Teamwork scoreboard.');
+                alert('An error occurred while clearing Teamwork scoreboard.');
             } finally {
                 clearButton2.disabled = false;
-                clearButton2.textContent = '🗑️ Clear Teamwork Scoreboard';
+                clearButton2.textContent = 'Clear Teamwork Scoreboard';
             }
         });
 
