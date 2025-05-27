@@ -271,43 +271,38 @@
         }
         
         function calculateScore() {
-    score = 0;
+            score = 0;
 
-    // Calculate Green Color Match
-    const greenBags = counts["Bean Bag Scored - Green"];
-    const greenBalls = counts["Ball in Scoring Zone - Green"];
-    if (greenBags > 0 && greenBalls > 0) {
-        score += greenBags * greenBalls * 2;
-    } else {
-        score += greenBags + greenBalls; // Add remaining items if no match
-    }
+            // Get counts for each item
+            const greenBags = counts["Bean Bag Scored - Green"];
+            const greenBalls = counts["Ball in Scoring Zone - Green"];
+            const blueBags = counts["Bean Bag Scored - Blue"];
+            const blueBalls = counts["Ball in Scoring Zone - Blue"];
 
-    // Calculate Blue Color Match
-    const blueBags = counts["Bean Bag Scored - Blue"];
-    const blueBalls = counts["Ball in Scoring Zone - Blue"];
-    if (blueBags > 0 && blueBalls > 0) {
-        score += blueBags * blueBalls * 2;
-    } else {
-        score += blueBags + blueBalls; // Add remaining items if no match
-    }
+            // Add individual points for green items
+            score += greenBags + greenBalls;
 
-    // Add points for all other actions
-    actions.forEach(({ name, points }) => {
-        if (name.includes("Neutral") || (!name.includes("Green") && !name.includes("Blue"))) {
-            score += counts[name] * points;
-        }
-    });
+            // Add color match bonus for green (only if both exist)
+            if (greenBags > 0 && greenBalls > 0) {
+                score += greenBags * greenBalls * 2;
+            }
 
-    updateScore();
-}
+            // Add individual points for blue items
+            score += blueBags + blueBalls;
 
+            // Add color match bonus for blue (only if both exist)
+            if (blueBags > 0 && blueBalls > 0) {
+                score += blueBags * blueBalls * 2;
+            }
 
-        function updateScore() {
-            document.getElementById('score').textContent = score;
-        }
+            // Add points for all other actions
+            actions.forEach(({ name, points }) => {
+                if (!name.includes("Green") && !name.includes("Blue")) {
+                    score += counts[name] * points;
+                }
+            });
 
-        function updateUI(action) {
-            document.getElementById(`${action.replace(/ /g, '-')}-count`).textContent = counts[action];
+            updateScore();
         }
 
         // Create the adjustment rows on load
@@ -316,5 +311,3 @@
 </body>
 
 </html>
-
-
