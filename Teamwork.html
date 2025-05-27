@@ -61,12 +61,12 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             overflow: hidden;
-            border: 2px solid rgba(255, 215, 0, 0.3);
+            border: 2px solid rgba(255, 215, 0, 0.4);
         }
 
         .header {
@@ -133,19 +133,22 @@
         }
 
         .btn {
-            padding: 15px 30px;
+            padding: 12px 20px;
             border: none;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 8px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             touch-action: manipulation;
+            min-width: 100px;
+            text-align: center;
         }
 
         .btn:hover {
@@ -181,18 +184,21 @@
         .color-section {
             border-radius: 15px;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.7);
             border: 3px solid;
+            backdrop-filter: blur(10px);
         }
 
         .blue-section {
             border-color: #2a5298;
             box-shadow: 0 8px 25px rgba(42, 82, 152, 0.2);
+            background: rgba(42, 82, 152, 0.05);
         }
 
         .green-section {
             border-color: #28a745;
             box-shadow: 0 8px 25px rgba(40, 167, 69, 0.2);
+            background: rgba(40, 167, 69, 0.05);
         }
 
         .section-title {
@@ -215,11 +221,12 @@
 
         .neutral-section {
             grid-column: 1 / -1;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 215, 0, 0.08);
             border: 3px solid #ffd700;
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+            backdrop-filter: blur(10px);
         }
 
         .neutral-section .section-title {
@@ -228,13 +235,14 @@
         }
 
         .adjustment-row {
-            background: white;
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 15px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             border: 2px solid transparent;
             transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
 
         .adjustment-row:hover {
@@ -435,6 +443,10 @@
                 padding: 10px;
             }
 
+            .container {
+                background: rgba(255, 255, 255, 0.75);
+            }
+
             .header h1 {
                 font-size: 2rem;
             }
@@ -451,8 +463,25 @@
                 grid-template-columns: 1fr;
             }
 
+            .color-section {
+                background: rgba(255, 255, 255, 0.6);
+            }
+
+            .blue-section {
+                background: rgba(42, 82, 152, 0.1);
+            }
+
+            .green-section {
+                background: rgba(40, 167, 69, 0.1);
+            }
+
+            .neutral-section {
+                background: rgba(255, 215, 0, 0.12);
+            }
+
             .adjustment-row {
                 padding: 15px;
+                background: rgba(255, 255, 255, 0.7);
             }
 
             .adjustment-row .title {
@@ -460,13 +489,14 @@
             }
 
             .action-buttons {
-                flex-direction: column;
-                align-items: center;
+                gap: 10px;
             }
 
             .btn {
-                width: 100%;
-                max-width: 300px;
+                flex: 1;
+                min-width: 90px;
+                font-size: 0.9rem;
+                padding: 10px 15px;
             }
 
             .adjustment-row .controls {
@@ -496,9 +526,9 @@
 
         <div class="content">
             <div class="action-buttons">
-                <a href="index.html" class="btn btn-back">← Back to Menu</a>
-                <button class="btn btn-reset" onclick="resetScore()">🔄 Reset Score</button>
-                <button class="btn btn-submit" onclick="toggleMenu()">📤 Submit Score</button>
+                <a href="index.html" class="btn btn-back">← Back</a>
+                <button class="btn btn-reset" onclick="resetScore()">🔄 Reset</button>
+                <button class="btn btn-submit" onclick="toggleMenu()">📤 Submit</button>
             </div>
 
             <div class="scoring-sections">
